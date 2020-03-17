@@ -1,29 +1,56 @@
 # ------------------ Game State
 
-# represent the board
-# represent the amount of turns
-# Player X's score
-# players O's score
-# rounds
+board = {
+    "a1": None, "a2": None, "a3": None,
+    "b1": None, "b2": None, "b3": None,
+    "c1": None, "c2": None, "c3": None
+}
+
+turns = 9
+
+player_x_score = 0
+players_0_score = 0
 
 # ------------------ Global Variables
 
-# current_player
-# win =  False
+current_players_turn = "x"
+win =  False
 
 # ------------------ Logic
 
-# greetings_header
-    # print statements
+def greetings_header():
+    print(" ")
+    print("----------------------")
+    print("Let's play Pic-Pac-Py!")
+    print("----------------------")
+    print(" ")
+    show_board()
 
-# Show_Board function
-    # lots of print statements
+def show_board():
+    row_1 = "1)    |   |   "
+    row_2 = "2)    |   |   "
+    row_3 = "3)    |   |   "
 
-# show players turn, then ask for the users input function
-    # print current_player
-    # input ...
+    print("    A   B   C ")
+    print("  ")
+    print(row_1)
+    print("   -----------")
+    print(row_2)
+    print("   -----------")
+    print(row_3)
+    print(" ")
+    show_player_and_input()
 
-# Insert an X or O in that sqaure as a string function
+def show_player_and_input():
+    print(f"*It is player {current_players_turn.upper()}'s turn*")
+    print(" ")
+    input("Select a spot you would like to insert your character at...: ").lower()
+    print(" ")
+
+def insert():
+    if input != "a1" or input != "a2" or input != "a3" or input != "b1" or input != "b2" or input != "b3" or input != "c1" or input != "c2" or input != "c3":
+        print("Bogus move! try again")
+        show_player_and_input()
     # match the input with the board object
     # if there is no match or the spot is taken
         # print
@@ -57,3 +84,5 @@
 # restart_game
     # reset game state
     # run show_board function
+
+greetings_header()
