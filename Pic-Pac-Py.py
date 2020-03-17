@@ -1,18 +1,13 @@
 # ------------------ Game State
 
 board = {
-    "a1": None, "a2": None, "a3": None,
-    "b1": None, "b2": None, "b3": None,
-    "c1": None, "c2": None, "c3": None
+    "a1": " ", "a2": " ", "a3": " ",
+    "b1": " ", "b2": " ", "b3": " ",
+    "c1": " ", "c2": " ", "c3": " "
 }
 
 turns = 9
-
-player_x_score = 0
-players_0_score = 0
-
-# ------------------ Global Variables
-
+score = {"x": 0, "o": 0}
 current_players_turn = "x"
 win =  False
 
@@ -24,65 +19,125 @@ def greetings_header():
     print("Let's play Pic-Pac-Py!")
     print("----------------------")
     print(" ")
+    print("Best of 3 wins!")
+    show_scores()
+
+
+def show_scores():
+    print(f"X: {score['x']}")
+    print(f"O: {score['o']}")
     show_board()
 
+
 def show_board():
-    row_1 = "1)    |   |   "
-    row_2 = "2)    |   |   "
-    row_3 = "3)    |   |   "
+    print(f"""
+        a   b   c
 
-    print("    A   B   C ")
-    print("  ")
-    print(row_1)
-    print("   -----------")
-    print(row_2)
-    print("   -----------")
-    print(row_3)
+    1)  {board["a1"]} | {board["b1"]} | {board["c1"]}
+        ----------
+    2)  {board["a2"]} | {board["b2"]} | {board["c2"]}
+        ----------
+    3)  {board["a3"]} | {board["b3"]} | {board["c3"]}
+    """)
+    print(f"It's player {current_players_turn.upper()}'s turn")
     print(" ")
-    show_player_and_input()
+    input_and_insert()
 
-def show_player_and_input():
-    print(f"*It is player {current_players_turn.upper()}'s turn*")
+
+def input_and_insert():
+    global turns
+    select = input("Select your spot. e.g 'a1': ")
     print(" ")
-    input("Select a spot you would like to insert your character at...: ").lower()
     print(" ")
+    if select == "a1" or select == "a2" or select == "a3" or select == "b1" or  select == "b2" or select == "b3" or select == "c1" or select == "c2" or select == "c3":
+        if board[select] == " ":
+            board[select] = current_players_turn
+            turns = turns - 1
+            check_for_win()
+        else:
+            print("can not insert on an already occupied cell")
+            input_and_insert()
+    else:
+        print("bogus move! try again") 
+        input_and_insert()   
 
-def insert():
-    if input != "a1" or input != "a2" or input != "a3" or input != "b1" or input != "b2" or input != "b3" or input != "c1" or input != "c2" or input != "c3":
-        print("Bogus move! try again")
-        show_player_and_input()
-    # match the input with the board object
-    # if there is no match or the spot is taken
-        # print
-        # run this function again
 
-# check_for_win function
-    # have eight if-else statements that check the board for current_player to see if they won
-        # if there is a win change the win variable to True
-    # if win == True
-        # add a point to the current_player's score
-        # run check_for_final_win
-    # else run the swap_turns function
+def check_for_win():
+    global win, turns, board, current_players_turn
+    if board["a1"] == current_players_turn and board["a2"] == current_players_turn and board["a3"] == current_players_turn:
+        win = True
+        print(f"{current_players_turn} won this round!")
+    if board["b1"] == current_players_turn and board["b2"] == current_players_turn and board["b3"] == current_players_turn:
+        win = True
+        print(f"{current_players_turn} won this round!")
+    if board["c1"] == current_players_turn and board["c2"] == current_players_turn and board["c3"] == current_players_turn:
+        win = True
+        print(f"{current_players_turn} won this round!")
+    if board["a1"] == current_players_turn and board["b1"] == current_players_turn and board["c1"] == current_players_turn:
+        win = True
+        print(f"{current_players_turn} won this round!")
+    if board["a2"] == current_players_turn and board["b2"] == current_players_turn and board["c2"] == current_players_turn:
+        win = True
+        print(f"{current_players_turn} won this round!")
+    if board["a3"] == current_players_turn and board["b3"] == current_players_turn and board["c3"] == current_players_turn:
+        win = True
+        print(f"{current_players_turn} won this round!")
+    if board["a1"] == current_players_turn and board["b2"] == current_players_turn and board["c3"] == current_players_turn:
+        win = True
+        print(f"{current_players_turn} won this round!")
+    if board["a3"] == current_players_turn and board["b2"] == current_players_turn and board["c1"] == current_players_turn:
+        win = True
+        print(f"{current_players_turn} won this round!")
+    if win == True:
+        if current_players_turn == "x":
+            score["x"] = score["x"] + 1
+            print(f"A point was added to {current_players_turn}")
+        else:
+            score["o"] = score["o"] + 1
+            print(f"A point was added to {current_players_turn}")
+        check_for_final_win()
+    elif turns == 0:
+        no_winner()
+    else: 
+        swap_turns()
 
-# Swap turns function
-    # if player X's turn == true
-        # players X's turn == false
-        # player O's turn == true
-    # if player O's turn == true
-        # player O's turn == false
-        # player X's turn == true
-    # run show_board function
 
-# check_for_final_win():
-    # if player O's score == 2
-        # print the final winner
-    # if player X's score == 2 
-        # print the final winner
-    # else
-        # run show_board function
+def no_winner():
+    print("no winner and no points added. Restarting game...")
+    restart_game()
 
-# restart_game
-    # reset game state
-    # run show_board function
+
+def swap_turns():
+    global current_players_turn
+    if current_players_turn == "x":
+        current_players_turn = "o"
+        show_board()
+    if current_players_turn == "o":
+        current_players_turn = "x"
+        show_board()
+
+def check_for_final_win():
+    if score["x"] == 2:
+        print("The final winner is X!")
+        print("You may continue to play")
+        restart_game()
+    if score["o"] == 2:
+        print("The final winner is O!")
+        print("You may continue to play")
+        restart_game()
+    else:
+        restart_game()
+
+def restart_game():
+    global board, turns, current_players_turn, win
+    board = {
+        "a1": " ", "a2": " ", "a3": " ",
+        "b1": " ", "b2": " ", "b3": " ",
+        "c1": " ", "c2": " ", "c3": " "
+    }
+    turns = 9
+    current_players_turn = "x"
+    win =  False
+    show_scores()
 
 greetings_header()
